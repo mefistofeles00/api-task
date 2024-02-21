@@ -78,7 +78,7 @@ class ContentController extends Controller
         $task = Task::find($id);
 
         if (!$task) {
-            return response()->json(['error' => 'Task not found'], 404);
+            return response()->json(['error' => 'Task deleted or not found'], 404);
         }
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
@@ -99,10 +99,15 @@ class ContentController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $task = Task::find($id);
+        if ($request->user()->is_admin) {
+            $task = Task::find($id);
+        }else{
+            return response()->json(['message' => 'you are not admin shet']);
+        }
         if (!$task) {
             return response()->json(['message' => 'Task silinemedi']);
         }
+
         $task->delete();
         return response()->json(['message' => 'task basari ile silindi']);
     }
