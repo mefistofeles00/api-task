@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class ContentController extends Controller
 {
+    public function index()
+    {
+        return "Api rotalari icin route/api.php dosyasini ziyaret edin!!   
+        1- Oncelikler Register olmaniz gerek
+        2- api keyini postmana ekleyin
+        ";
+    }
     public function createTask(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -53,7 +61,7 @@ class ContentController extends Controller
         $mail->AddAddress($request->email, 'inanc Eroglu');
         $mail->IsHTML(); // send as HTML
         if(!$mail->Send()) {//to see if we return a message or a value bolean
-            return response()->json(['message' => 'mail gonderilemedi'], 401);
+            return response()->json(['message' => 'mail gonderilemedi mail kpnfigurasyonlarinizi ayarlayiniz!!'], 401);
 
         }
         return response()->json(['message' => 'mail gonderildi'], 200);
@@ -87,5 +95,15 @@ class ContentController extends Controller
 
         return response()->json(['message' => 'Task updated successfully'], 200);
 
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json(['message' => 'Task silinemedi']);
+        }
+        $task->delete();
+        return response()->json(['message' => 'task basari ile silindi']);
     }
 }
