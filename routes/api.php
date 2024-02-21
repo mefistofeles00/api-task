@@ -19,6 +19,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function() {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/create-task', [ContentController::class, 'createTask']);
 Route::post('/update-task/{id}', [ContentController::class, 'updateTask']);
+Route::delete('/delete-task/{id}', [ContentController::class, 'delete']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
